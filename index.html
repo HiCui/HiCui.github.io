@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>男友爱不爱你测试</title>
+    <style>
+        :root {
+            --primary-color: #ff6b9d;
+            --secondary-color: #ffd1dc;
+            --accent-color: #ff4081;
+            --text-color: #333;
+            --light-color: #fff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: var(--light-color);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .intro {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: var(--light-color);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+        
+        .test-container {
+            background-color: var(--light-color);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+        
+        .question {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .question:last-child {
+            border-bottom: none;
+        }
+        
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .option.selected {
+            background-color: var(--secondary-color);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .option input {
+            margin-right: 10px;
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--primary-color);
+            color: var(--light-color);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+        
+        button:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .result-container {
+            display: none;
+            background-color: var(--light-color);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .score-display {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin: 20px 0;
+        }
+        
+        .result-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+        }
+        
+        .result-details {
+            text-align: left;
+            margin-top: 25px;
+        }
+        
+        .result-details h3 {
+            margin-bottom: 10px;
+            color: var(--accent-color);
+        }
+        
+        .result-details ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .result-details li {
+            margin-bottom: 8px;
+        }
+        
+        .restart-btn {
+            margin-top: 20px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #eee;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .test-container {
+                padding: 15px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>男友爱不爱你测试</h1>
+            <p>通过20个问题，深入了解你们的关系</p>
+        </header>
+        
+        <section class="intro">
+            <h2>欢迎参加测试！</h2>
+            <p>这个测试将帮助你从多个角度评估男友对你的感情。请根据实际情况选择最符合的选项，所有回答都将保密。</p>
+            <p>完成测试后，你将收到一份详细的分析报告。</p>
+        </section>
+        
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        
+        <section class="test-container" id="test-container">
+            <!-- 问题将通过JavaScript动态生成 -->
+        </section>
+        
+        <section class="result-container" id="result-container">
+            <!-- 结果将通过JavaScript动态生成 -->
+        </section>
+    </div>
+
+    <script>
+        // 测试问题
+        const questions = [
+            {
+                text: "他是否经常主动联系你？",
+                options: [
+                    { text: "总是主动联系我", score: 5 },
+                    { text: "经常主动联系", score: 4 },
+                    { text: "偶尔主动联系", score: 3 },
+                    { text: "很少主动联系", score: 2 },
+                    { text: "几乎从不主动联系", score: 1 }
+                ]
+            },
+            {
+                text: "他是否记得你们的重要纪念日？",
+                options: [
+                    { text: "总是记得并精心准备", score: 5 },
+                    { text: "通常记得并会庆祝", score: 4 },
+                    { text: "有时记得", score: 3 },
+                    { text: "很少记得", score: 2 },
+                    { text: "从不记得", score: 1 }
+                ]
+            },
+            {
+                text: "在你遇到困难时，他的态度是？",
+                options: [
+                    { text: "第一时间主动帮助我", score: 5 },
+                    { text: "很关心并尽力帮助", score: 4 },
+                    { text: "会询问但帮助有限", score: 3 },
+                    { text: "只是口头安慰", score: 2 },
+                    { text: "不太在意", score: 1 }
+                ]
+            },
+            {
+                text: "他是否愿意为你花时间？",
+                options: [
+                    { text: "总是把时间优先给我", score: 5 },
+                    { text: "经常抽时间陪我", score: 4 },
+                    { text: "有空时会陪我", score: 3 },
+                    { text: "很少有时间陪我", score: 2 },
+                    { text: "总是很忙没时间", score: 1 }
+                ]
+            },
+            {
+                text: "他是否愿意为你做出改变或妥协？",
+                options: [
+                    { text: "经常主动为我改变", score: 5 },
+                    { text: "愿意为我做出重要改变", score: 4 },
+                    { text: "在某些事情上会妥协", score: 3 },
+                    { text: "很少愿意改变", score: 2 },
+                    { text: "从不妥协", score: 1 }
+                ]
+            },
+            {
+                text: "他是否主动规划你们的未来？",
+                options: [
+                    { text: "经常讨论并规划我们的未来", score: 5 },
+                    { text: "有时会提到未来计划", score: 4 },
+                    { text: "当我提起时会回应", score: 3 },
+                    { text: "很少谈论未来", score: 2 },
+                    { text: "回避谈论未来", score: 1 }
+                ]
+            },
+            {
+                text: "他是否尊重你的意见和选择？",
+                options: [
+                    { text: "非常尊重并重视我的意见", score: 5 },
+                    { text: "大多数时候尊重我的选择", score: 4 },
+                    { text: "有时会尊重", score: 3 },
+                    { text: "很少考虑我的意见", score: 2 },
+                    { text: "经常忽视我的想法", score: 1 }
+                ]
+            },
+            {
+                text: "他是否主动把你介绍给他的亲友？",
+                options: [
+                    { text: "主动介绍我给所有亲友", score: 5 },
+                    { text: "介绍给大部分亲友", score: 4 },
+                    { text: "介绍给部分亲友", score: 3 },
+                    { text: "只介绍给少数朋友", score: 2 },
+                    { text: "从未主动介绍", score: 1 }
+                ]
+            },
+            {
+                text: "他是否关注你的情绪变化？",
+                options: [
+                    { text: "总能察觉并关心我的情绪", score: 5 },
+                    { text: "通常能注意到我的情绪", score: 4 },
+                    { text: "有时能察觉", score: 3 },
+                    { text: "很少关注我的情绪", score: 2 },
+                    { text: "从不关心我的感受", score: 1 }
+                ]
+            },
+            {
+                text: "他是否愿意为你花钱？",
+                options: [
+                    { text: "总是大方且不计较", score: 5 },
+                    { text: "经常主动为我花钱", score: 4 },
+                    { text: "在特殊场合会花钱", score: 3 },
+                    { text: "很少为我花钱", score: 2 },
+                    { text: "几乎从不", score: 1 }
+                ]
+            },
+            {
+                text: "他是否对你的兴趣爱好表示支持？",
+                options: [
+                    { text: "非常支持并参与", score: 5 },
+                    { text: "支持并鼓励我", score: 4 },
+                    { text: "不反对但也不参与", score: 3 },
+                    { text: "偶尔会抱怨", score: 2 },
+                    { text: "经常反对", score: 1 }
+                ]
+            },
+            {
+                text: "他在朋友面前如何对待你？",
+                options: [
+                    { text: "非常体贴并引以为傲", score: 5 },
+                    { text: "表现得很亲密", score: 4 },
+                    { text: "与私下一样", score: 3 },
+                    { text: "有些冷淡", score: 2 },
+                    { text: "明显疏远", score: 1 }
+                ]
+            },
+            {
+                text: "他是否愿意为你做一些他不喜欢的事？",
+                options: [
+                    { text: "经常主动做", score: 5 },
+                    { text: "愿意为我尝试", score: 4 },
+                    { text: "偶尔会做", score: 3 },
+                    { text: "很少愿意", score: 2 },
+                    { text: "坚决不做", score: 1 }
+                ]
+            },
+            {
+                text: "吵架后他的态度是？",
+                options: [
+                    { text: "总是主动道歉和沟通", score: 5 },
+                    { text: "通常先缓和关系", score: 4 },
+                    { text: "有时会主动和好", score: 3 },
+                    { text: "很少主动和解", score: 2 },
+                    { text: "从不认错", score: 1 }
+                ]
+            },
+            {
+                text: "他是否记得你喜欢和不喜欢的事物？",
+                options: [
+                    { text: "记得所有细节", score: 5 },
+                    { text: "记得大部分", score: 4 },
+                    { text: "记得一些重要的", score: 3 },
+                    { text: "记得很少", score: 2 },
+                    { text: "几乎不记得", score: 1 }
+                ]
+            },
+            {
+                text: "他是否主动关心你的健康和安全？",
+                options: [
+                    { text: "非常细心周到", score: 5 },
+                    { text: "经常关心", score: 4 },
+                    { text: "有时会关心", score: 3 },
+                    { text: "偶尔提及", score: 2 },
+                    { text: "几乎不关心", score: 1 }
+                ]
+            },
+            {
+                text: "他是否愿意公开你们的恋情？",
+                options: [
+                    { text: "主动在社交媒体公开", score: 5 },
+                    { text: "不回避公开关系", score: 4 },
+                    { text: "当被问及时会承认", score: 3 },
+                    { text: "很少主动提及", score: 2 },
+                    { text: "回避公开关系", score: 1 }
+                ]
+            },
+            {
+                text: "他是否对你的家人友好？",
+                options: [
+                    { text: "非常友好并主动联系", score: 5 },
+                    { text: "尊重且友好", score: 4 },
+                    { text: "基本礼貌", score: 3 },
+                    { text: "有些疏远", score: 2 },
+                    { text: "明显不感兴趣", score: 1 }
+                ]
+            },
+            {
+                text: "他是否为你准备过惊喜？",
+                options: [
+                    { text: "经常准备各种惊喜", score: 5 },
+                    { text: "在重要日子会准备", score: 4 },
+                    { text: "偶尔会准备", score: 3 },
+                    { text: "很少准备", score: 2 },
+                    { text: "从未准备过", score: 1 }
+                ]
+            },
+            {
+                text: "总体而言，你感觉他爱你吗？",
+                options: [
+                    { text: "非常确定他深爱着我", score: 5 },
+                    { text: "感觉他爱我", score: 4 },
+                    { text: "有时爱有时不确定", score: 3 },
+                    { text: "不太确定", score: 2 },
+                    { text: "感觉他不爱我", score: 1 }
+                ]
+            }
+        ];
+
+        // 应用状态
+        let currentQuestion = 0;
+        let answers = [];
+        let totalScore = 0;
+
+        // DOM元素
+        const testContainer = document.getElementById('test-container');
+        const resultContainer = document.getElementById('result-container');
+        const progressBar = document.getElementById('progress');
+
+        // 初始化测试
+        function initTest() {
+            showQuestion();
+            updateProgress();
+        }
+
+        // 显示当前问题
+        function showQuestion() {
+            const question = questions[currentQuestion];
+            
+            let optionsHTML = '';
+            question.options.forEach((option, index) => {
+                optionsHTML += `
+                    <div class="option" onclick="selectOption(${index})">
+                        <input type="radio" name="answer" id="option${index}" value="${index}">
+                        <label for="option${index}">${option.text}</label>
+                    </div>
+                `;
+            });
+            
+            testContainer.innerHTML = `
+                <div class="question">
+                    <div class="question-text">${currentQuestion + 1}. ${question.text}</div>
+                    <div class="options">${optionsHTML}</div>
+                </div>
+                <div class="buttons">
+                    <button id="prev-btn" onclick="prevQuestion()" ${currentQuestion === 0 ? 'disabled' : ''}>上一题</button>
+                    <button id="next-btn" onclick="nextQuestion()" ${currentQuestion === questions.length - 1 ? 'style="display:none"' : ''}>下一题</button>
+                    <button id="submit-btn" onclick="submitTest()" ${currentQuestion === questions.length - 1 ? '' : 'style="display:none"'}>查看结果</button>
+                </div>
+            `;
+        }
+
+        // 选择选项
+        function selectOption(optionIndex) {
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => option.classList.remove('selected'));
+            options[optionIndex].classList.add('selected');
+            
+            const radio = document.getElementById(`option${optionIndex}`);
+            radio.checked = true;
+            
+            answers[currentQuestion] = optionIndex;
+        }
+
+        // 下一题
+        function nextQuestion() {
+            if (answers[currentQuestion] === undefined) {
+                alert('请选择一个答案');
+                return;
+            }
+            
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                showQuestion();
+                updateProgress();
+            }
+        }
+
+        // 上一题
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+                updateProgress();
+            }
+        }
+
+        // 更新进度条
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        // 提交测试
+        function submitTest() {
+            if (answers[currentQuestion] === undefined) {
+                alert('请选择一个答案');
+                return;
+            }
+            
+            // 计算总分
+            totalScore = 0;
+            answers.forEach((answerIndex, questionIndex) => {
+                totalScore += questions[questionIndex].options[answerIndex].score;
+            });
+            
+            // 显示结果
+            showResult();
+        }
+
+        // 显示结果
+        function showResult() {
+            const maxScore = questions.length * 5;
+            const percentage = (totalScore / maxScore) * 100;
+            
+            let title, description, details;
+            
+            if (percentage >= 90) {
+                title = "他非常爱你！";
+                description = "你们的感情非常深厚，他表现出极高的爱意和承诺。";
+                details = `
+                    <h3>分析结果：</h3>
+                    <ul>
+                        <li>他表现出极高的投入度和承诺</li>
+                        <li>他非常重视你的感受和需求</li>
+                        <li>你们的沟通和互动非常健康</li>
+                        <li>他积极规划你们的未来</li>
+                    </ul>
+                    <h3>建议：</h3>
+                    <p>继续保持良好的沟通和互动，珍惜这份难得的感情。同时也要注意保持个人空间和独立性，让关系更加平衡健康。</p>
+                `;
+            } else if (percentage >= 70) {
+                title = "他爱你！";
+                description = "他对你有深厚的感情，关系稳定且健康。";
+                details = `
+                    <h3>分析结果：</h3>
+                    <ul>
+                        <li>他对你有明确的感情投入</li>
+                        <li>他关心你的感受和需求</li>
+                        <li>你们的关系基础稳固</li>
+                        <li>有进一步发展的潜力</li>
+                    </ul>
+                    <h3>建议：</h3>
+                    <p>继续保持良好的沟通，关注彼此的需求。可以尝试增加一些新的共同活动，为关系注入新鲜感。</p>
+                `;
+            } else if (percentage >= 50) {
+                title = "他对你有感情";
+                description = "他对你有感情，但可能还不够深或表达不够充分。";
+                details = `
+                    <h3>分析结果：</h3>
+                    <ul>
+                        <li>他对你有基本的感情基础</li>
+                        <li>但在某些方面投入不足</li>
+                        <li>可能需要更多的沟通和理解</li>
+                        <li>关系有发展空间</li>
+                    </ul>
+                    <h3>建议：</h3>
+                    <p>尝试更开放地沟通彼此的需求和期望，了解是否存在误解或障碍。给予关系更多时间和机会发展。</p>
+                `;
+            } else if (percentage >= 30) {
+                title = "感情基础薄弱";
+                description = "他对你的感情可能还不够深，或者表达方式有问题。";
+                details = `
+                    <h3>分析结果：</h3>
+                    <ul>
+                        <li>感情投入明显不足</li>
+                        <li>可能存在沟通或理解问题</li>
+                        <li>关系需要认真评估</li>
+                        <li>考虑是否有未解决的问题</li>
+                    </ul>
+                    <h3>建议：</h3>
+                    <p>需要深入沟通，明确彼此对关系的期望。考虑是否存在需要解决的根本问题，必要时寻求专业建议。</p>
+                `;
+            } else {
+                title = "需要认真考虑";
+                description = "他对你的感情可能非常有限，关系面临严峻挑战。";
+                details = `
+                    <h3>分析结果：</h3>
+                    <ul>
+                        <li>感情投入严重不足</li>
+                        <li>可能存在根本性的不匹配</li>
+                        <li>关系质量令人担忧</li>
+                        <li>需要认真考虑未来</li>
+                    </ul>
+                    <h3>建议：</h3>
+                    <p>强烈建议进行深入、坦诚的对话，评估关系是否健康且可持续。优先考虑自己的情感需求和幸福感。</p>
+                `;
+            }
+            
+            resultContainer.innerHTML = `
+                <h2 class="result-title">${title}</h2>
+                <p>${description}</p>
+                <div class="score-display">${totalScore}/${maxScore}</div>
+                <div class="result-details">
+                    ${details}
+                </div>
+                <button class="restart-btn" onclick="restartTest()">重新测试</button>
+            `;
+            
+            testContainer.style.display = 'none';
+            resultContainer.style.display = 'block';
+        }
+
+        // 重新开始测试
+        function restartTest() {
+            currentQuestion = 0;
+            answers = [];
+            totalScore = 0;
+            
+            testContainer.style.display = 'block';
+            resultContainer.style.display = 'none';
+            
+            showQuestion();
+            updateProgress();
+        }
+
+        // 初始化
+        window.onload = initTest;
+    </script>
+</body>
+</html>
